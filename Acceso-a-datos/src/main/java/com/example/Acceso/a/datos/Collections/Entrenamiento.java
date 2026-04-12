@@ -25,6 +25,8 @@ public class Entrenamiento {
     private Integer TiempoMinutos;
     private Disciplina disciplina;
 
+    private String rutaImagen;
+
     @Indexed
     @DocumentReference
     private Deportista deportista;
