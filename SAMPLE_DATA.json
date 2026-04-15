@@ -1,0 +1,76 @@
+{
+  "usuariosEjemplo": [
+    {
+      "username": "juan_deportista",
+      "password": "password123",
+      "email": "juan@deporte.com",
+      "nombre": "Juan García López"
+    },
+    {
+      "username": "maria_athlete",
+      "password": "Password456!",
+      "email": "maria@sport.com",
+      "nombre": "María Rodríguez Pérez"
+    },
+    {
+      "username": "carlos_fit",
+      "password": "fitnessPwd789",
+      "email": "carlos@fit.com",
+      "nombre": "Carlos Martínez"
+    }
+  ],
+  "deportistasEjemplo": [
+    {
+      "nombre": "Lionel Messi",
+      "email": "messi@football.com",
+      "edad": 36
+    },
+    {
+      "nombre": "Serena Williams",
+      "email": "serena@tennis.com",
+      "edad": 42
+    },
+    {
+      "nombre": "Novak Djokovic",
+      "email": "djokovic@tennis.com",
+      "edad": 37
+    }
+  ],
+  "entrenamientosEjemplo": [
+    {
+      "fecha": "2026-04-14",
+      "distancia": 10.5,
+      "TiempoMinutos": 45,
+      "disciplina": {
+        "nombre": "Running"
+      },
+      "deportistaId": "ID_DEL_DEPORTISTA_1"
+    },
+    {
+      "fecha": "2026-04-15",
+      "distancia": 25.0,
+      "TiempoMinutos": 90,
+      "disciplina": {
+        "nombre": "Ciclismo"
+      },
+      "deportistaId": "ID_DEL_DEPORTISTA_2"
+    },
+    {
+      "fecha": "2026-04-16",
+      "distancia": 8.3,
+      "TiempoMinutos": 35,
+      "disciplina": {
+        "nombre": "Natación"
+      },
+      "deportistaId": "ID_DEL_DEPORTISTA_3"
+    }
+  ],
+  "instruccionesUso": {
+    "paso1": "Registra un usuario: POST /auth/register",
+    "paso2": "Haz login: POST /auth/login (recibirás un token)",
+    "paso3": "Crea deportistas: POST /deportista (requiere token)",
+    "paso4": "Crea entrenamientos: POST /entrenamiento (requiere token y deportistaId válido)",
+    "paso5": "Carga imágenes: POST /entrenamiento/{id}/portada (requiere token)"
+  }
+}
+

@@ -23,7 +23,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/entrenamiento")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177"})
 public class EntrenamientoController {
 
     @Autowired
@@ -40,7 +40,7 @@ public class EntrenamientoController {
     //Nuevos ENDpoints Tarea5 (subir imagenes a carpeta en directorio)
 
     // POST: Subir imagen asociada a un entrenamiento
-    @PostMapping("/{id}/portada")
+    @PostMapping("/{id}/upload-portada")
     public Entrenamiento subirImagen(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         Entrenamiento ent = entrenamientoRepository.findById(id).orElseThrow();
         String nombreArchivo = storageService.store(file);
@@ -93,8 +93,8 @@ public class EntrenamientoController {
         }
     }
 
-    // EXPORTAR A JSON (Opcional con IA)
-    @GetMapping("/export/json")
+    // EXPORTAR A JSON
+    @GetMapping("/export")
     public ResponseEntity<byte[]> exportarJSON() throws IOException {
         List<Entrenamiento> lista = entrenamientoRepository.findAll();
         byte[] data = objectMapper.writeValueAsBytes(lista);
@@ -104,7 +104,7 @@ public class EntrenamientoController {
     }
 
     // IMPORTAR: Lee un archivo .json y guarda todos los entrenamientos de golpe
-    @PostMapping("/import/json")
+    @PostMapping("/import")
     public String importarJSON(@RequestParam("file") MultipartFile file) throws IOException {
         // Leemos el archivo y lo convertimos en una lista de objetos Entrenamiento
         List<Entrenamiento> lista = objectMapper.readValue(file.getInputStream(), new TypeReference<List<Entrenamiento>>(){});
@@ -128,8 +128,19 @@ public class EntrenamientoController {
 
                     // Usamos el repositorio de ENTRENAMIENTO para guardar la Entidad
                     entrenamientoRepository.save(ent);
+                    
+                    // Crear DTO de respuesta con nombreDeportista
+                    EntrenamientoDTO respuesta = new EntrenamientoDTO(
+                        ent.getId(),
+                        ent.getFecha(),
+                        ent.getDisciplina(),
+                        ent.getDeportista().getId(),
+                        ent.getDeportista().getNombre(),
+                        ent.getDistancia(),
+                        ent.getTiempoMinutos()
+                    );
 
-                    return ResponseEntity.ok(ent);
+                    return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
@@ -161,9 +172,23 @@ public class EntrenamientoController {
 
     //Listar entrenamientos de un deportista
     @GetMapping("/deportista/{deportistaId}")
-    public ResponseEntity<List<Entrenamiento>> listarPorDeportista(@PathVariable String deportistaId) {
+    public ResponseEntity<List<EntrenamientoDTO>> listarPorDeportista(@PathVariable String deportistaId) {
         List<Entrenamiento> lista = entrenamientoRepository.findByDeportistaId(deportistaId);
-        return ResponseEntity.ok(lista);
+        
+        // Mapear a DTO con nombreDeportista incluido
+        List<EntrenamientoDTO> listaDTO = lista.stream().map(ent -> 
+            new EntrenamientoDTO(
+                ent.getId(),
+                ent.getFecha(),
+                ent.getDisciplina(),
+                ent.getDeportista().getId(),
+                ent.getDeportista().getNombre(),
+                ent.getDistancia(),
+                ent.getTiempoMinutos()
+            )
+        ).toList();
+        
+        return ResponseEntity.ok(listaDTO);
     }
 
     @PutMapping("/{id}")

@@ -5,6 +5,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.annotation.PostConstruct;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -16,6 +17,7 @@ public class StorageService {
     // Carpeta donde se guardarán las fotos de los entrenamientos
     private final Path rootLocation = Paths.get("upload-dir");
 
+    @PostConstruct
     public void init() {
         try {
             if (!Files.exists(rootLocation)) {

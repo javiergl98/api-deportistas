@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/deportista")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:5176", "http://localhost:5177"})
 public class DeportistaController {
 
     @Autowired
@@ -35,7 +36,7 @@ public class DeportistaController {
     public ResponseEntity<List<Deportista>> listarDeportistas(){
         List<Deportista> deportistas = deportistaRepository.findAll();
 
-        return new ResponseEntity<>(deportistas, HttpStatus.FOUND);
+        return new ResponseEntity<>(deportistas, HttpStatus.OK);
     }
 
     //Borrar
@@ -50,13 +51,13 @@ public class DeportistaController {
     }
 
     //Obtener
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     public ResponseEntity<?> obtenerDeportista (@PathVariable String id){
         Optional<Deportista> deportista = deportistaRepository.findById(id);
         if (deportista.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        return new ResponseEntity<>(deportista, HttpStatus.FOUND);
+        return new ResponseEntity<>(deportista, HttpStatus.OK);
     }
 
     //Actualizar
